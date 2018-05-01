@@ -3,25 +3,38 @@ const int leftBottomLed = 3;
 const int centerLed = 4;
 const int rightTopLed = 6;
 const int rightBottomled = 5;
+const int button = 7;
 
 void  setup(void)
 {
   for (int led = 2; led < 7; led++)
     pinMode(led, OUTPUT);
-    diceAlarm();
+  pinMode(button, INPUT_PULLUP);
+  randomSeed(analogRead(0));
+  Serial.begin(9600);
+  diceAlarm();
 }
 
 void  loop(void)
 {
-  for (int i = 0; i < 6; i++)
+  int     n;
+  boolean state = digitalRead(button);
+  
+  if (!state)
   {
-    allDisplays(i);
-    delay(500);
+    for (int i = 100; i < 250; i += 10)
+    {
+      n = random(6);
+      Serial.println(n);
+      allDisplays(n);
+      delay(i);
+    }
   }
 }
 
 void  allDisplays(int n)
 {
+  displayNone();
   switch (n)
   {
     case 0:
@@ -50,13 +63,14 @@ void  allDisplays(int n)
 
 void  diceAlarm(void)
 {
-  for (int i = 0; i <= 2; i++)
+  for (int i = 0; i < 2; i++)
   {
     displayNone();
     delay(250);
     displayFive();
     delay(250);
   }
+  displayNone();
 }
 
 void  displayNone(void)
@@ -67,13 +81,11 @@ void  displayNone(void)
 
 void displayOne(void)
 {
-  displayNone();
   digitalWrite(centerLed, HIGH);
 }
 
 void  displayTwo(void)
 {
-  displayNone();
   digitalWrite(leftBottomLed, HIGH);
   digitalWrite(rightTopLed, HIGH);
 }
@@ -81,12 +93,11 @@ void  displayTwo(void)
 void  displayThree(void)
 {
   displayTwo();
-  digitalWrite(centerLed, HIGH);
+  displayOne();
 }
 
 void  displayFour(void)
 {
-  displayNone();
   digitalWrite(leftTopLed, HIGH);
   digitalWrite(leftBottomLed, HIGH);
   digitalWrite(rightTopLed, HIGH);
