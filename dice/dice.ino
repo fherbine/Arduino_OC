@@ -8,11 +8,55 @@ void  setup(void)
 {
   for (int led = 2; led < 7; led++)
     pinMode(led, OUTPUT);
-    displayFive();
+    diceAlarm();
 }
 
 void  loop(void)
 {
+  for (int i = 0; i < 6; i++)
+  {
+    allDisplays(i);
+    delay(500);
+  }
+}
+
+void  allDisplays(int n)
+{
+  switch (n)
+  {
+    case 0:
+      displayNone();
+      break;
+    case 1:
+      displayOne();
+      break;
+    case 2:
+      displayTwo();
+      break;
+    case 3:
+      displayThree();
+      break;
+    case 4:
+      displayFour();
+      break;
+    case 5:
+      displayFive();
+      break;
+    default:
+      diceAlarm();
+      break;
+  }
+}
+
+void  diceAlarm(void)
+{
+  for (int i = 0; i <= 2; i++)
+  {
+    displayNone();
+    delay(250);
+    displayFive();
+    delay(250);
+  }
 }
 
 void  displayNone(void)
