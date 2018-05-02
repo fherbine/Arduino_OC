@@ -7,25 +7,23 @@ const int button = 7;
 
 void  setup(void)
 {
-  for (int led = 2; led < 7; led++)
+  for (int led = 2; led < 7; led++) // On definit les leds comme des Sorties
     pinMode(led, OUTPUT);
-  pinMode(button, INPUT_PULLUP);
+  pinMode(button, INPUT_PULLUP); // Le bouton est une entree se servant de la resistance pullUp integree dans l'Arduino (20kOhms)
   randomSeed(analogRead(0));
-  Serial.begin(9600);
-  diceAlarm();
+  diceAlarm(); // cette fonction signale a l'utilisateur la fin du setup en faisant clignoter toutes les LEDs deux fois
 }
 
 void  loop(void)
 {
   int     n;
-  boolean state = digitalRead(button);
+  boolean state = digitalRead(button); // On lit l'etat du bouton
   
-  if (!state)
+  if (!state) // si le bouton -> 0V on valide la condition et on entre
   {
-    for (int i = 100; i < 250; i += 10)
+    for (int i = 100; i < 250; i += 10) // on ralenti la frequence de 10 ms a chaque boucles soit de 100ms a 250, 15 passages dans cette boucle
     {
-      n = random(6);
-      Serial.println(n);
+      n = random(6); // on tire un nombre entre 0  et 5
       allDisplays(n);
       delay(i);
     }
@@ -35,7 +33,7 @@ void  loop(void)
 void  allDisplays(int n)
 {
   displayNone();
-  switch (n)
+  switch (n) // ici on appel la bonne fonction a l'aide d'un switch(), qui equivaut a une foret de if()
   {
     case 0:
       displayNone();
@@ -56,7 +54,7 @@ void  allDisplays(int n)
       displayFive();
       break;
     default:
-      diceAlarm();
+      diceAlarm(); // si le chiffre est in coherent => erreur cotes programmeur on fait clignoter toutes les LEDs pour signaler le probleme
       break;
   }
 }
